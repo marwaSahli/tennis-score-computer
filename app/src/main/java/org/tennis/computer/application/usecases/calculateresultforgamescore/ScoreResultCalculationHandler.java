@@ -4,38 +4,44 @@ import io.vavr.control.Either;
 import org.tennis.computer.application.CalculationHandler;
 import org.tennis.computer.application.dto.GameScore;
 import org.tennis.computer.domain.Game;
+import org.tennis.computer.domain.GameRound;
+import org.tennis.computer.domain.Player;
 import org.tennis.computer.domain.Score;
 import org.tennis.computer.domain.errors.DomainError;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ScoreResultCalculationHandler implements CalculationHandler<String, Either<DomainError, GameScore>> {
 
-public class ScoreResultCalculationHandler implements CalculationHandler<String, Either<DomainError, List<GameScore>>> {
     @Override
-    public Either<DomainError, List<GameScore>> handle(String scoreData) {
+    public Either<DomainError, GameScore> handle(String scoreData) {
         var result = Game.build(scoreData);
         if(result.isLeft())
             return Either.left(result.getLeft());
 
         Game game = result.get();
-        List<GameScore> gameSequencedScore = new ArrayList<>();
+        createGameScore(game);
+        return Either.right(GameScore.from(game));
+    }
+
+    private void createGameScore(Game game){
+        Player playerA = Player.build("A", Score.ZERO);
+        Player playerB = Player.build("B", Score.ZERO);
         for (char point : game.getGameGlobalScore().toCharArray()) {
             switch (point){
                 case 'A'  -> {
-                    game.getPlayerA().updateRoundScore(game.getPlayerB());
-                    if(game.getPlayerB().getScore().equals(Score.ADVANTAGE))
-                        game.getPlayerB().updateScore(Score.FOURTY);
+                    playerA.updateRoundScore(playerB);
+                    if(playerB.getScore().equals(Score.ADVANTAGE))
+                        playerB.update(Score.FOURTY);
 
                 }
                 case 'B' -> {
-                    game.getPlayerB().updateRoundScore(game.getPlayerA());
-                    if(game.getPlayerA().getScore().equals(Score.ADVANTAGE))
-                        game.getPlayerA().updateScore(Score.FOURTY);
+                    playerB.updateRoundScore(playerA);
+                    if(playerA.getScore().equals(Score.ADVANTAGE))
+                        playerA.update(Score.FOURTY);
                 }
             }
-            gameSequencedScore.add(GameScore.from(game));
+            game.update(GameRound.build(
+                    Player.buildFromData(playerA),
+                    Player.buildFromData(playerB)));
         }
-
-        return Either.right(gameSequencedScore);
     }
 }

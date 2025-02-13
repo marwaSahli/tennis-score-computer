@@ -7,8 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.tennis.computer.application.dto.GameScore;
-import org.tennis.computer.domain.Game;
-import org.tennis.computer.domain.Score;
 import org.tennis.computer.domain.errors.DomainError;
 import org.tennis.computer.domain.errors.GameNotValid;
 
@@ -20,7 +18,7 @@ import java.util.stream.Stream;
 class ScoreResultCalculationHandlerTest {
 
     private  ScoreResultCalculationHandler scoreResultCalculationHandler;
-    Either<DomainError, List<GameScore>> result;
+    Either<DomainError, GameScore> result;
 
     @BeforeEach
     void setUp() {
@@ -38,15 +36,16 @@ class ScoreResultCalculationHandlerTest {
     @ParameterizedTest
     @MethodSource("goodGameValuesProvider")
     public void shouldRenderGameDomainValueWhenGameTourValueIsGood(String globalScore,
-                                                                   List<Map<String, Score>> resultList) {
+                                                                   List<Map<String, String>> resultList,
+                                                                   String gameResult) {
         result = scoreResultCalculationHandler.handle(globalScore);
         Assertions.assertTrue(result.isRight());
-        for(int i = 0; i < result.get().size(); i++){
-            Assertions.assertEquals(resultList.get(i).get("A"), result.get().get(i).getPlayerAscore());
-            Assertions.assertEquals(resultList.get(i).get("B"), result.get().get(i).getPlayerBscore());
-        }
+        for(int i = 0; i < result.get().getGameRounds().size(); i++){
+            Assertions.assertEquals(resultList.get(i).get("A"), result.get().getGameRounds().get(i).get("A"));
+            Assertions.assertEquals(resultList.get(i).get("B"), result.get().getGameRounds().get(i).get("B"));
+       }
 
-
+        Assertions.assertEquals(gameResult,  result.get().getGameResult());
     }
 
     private static Stream<String> wrongGameValuesProvider() {
@@ -68,7 +67,8 @@ class ScoreResultCalculationHandlerTest {
                                 Map.of("A", "30", "B", "30"),
                                 Map.of("A", "40", "B", "30"),
                                 Map.of("A", "40", "B", "30")
-                        )),
+                        ),
+                        "Player A wins the game"),
                 Arguments.of("abAbABBABB",
                         List.of(Map.of("A", "15", "B", "0"),
                                 Map.of("A", "15", "B", "15"),
@@ -80,7 +80,8 @@ class ScoreResultCalculationHandlerTest {
                                 Map.of("A", "40", "B","40"),
                                 Map.of("A", "40", "B", "ADVANTAGE"),
                                 Map.of("A", "40", "B", "ADVANTAGE")
-                        ))
+                        ),
+                        "Player B wins the game")
         );
     }
 }

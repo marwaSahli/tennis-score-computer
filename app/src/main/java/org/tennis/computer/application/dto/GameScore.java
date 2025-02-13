@@ -3,29 +3,49 @@ package org.tennis.computer.application.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.tennis.computer.domain.Game;
-import org.tennis.computer.domain.Player;
+import org.tennis.computer.domain.GameResult;
 import org.tennis.computer.domain.Score;
+
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @AllArgsConstructor
 public class GameScore {
-    String playerAscore;
-    String playerBscore;
+    private List<Map<String, String>> gameRounds;
+    private String gameResult;
 
     public static GameScore from(Game game){
-        return new GameScore(createScoreFromDomain(game.getPlayerA().getScore()),
-                createScoreFromDomain(game.getPlayerB().getScore()));
+        List<Map<String, String>> gameRounds = game.getGameRounds().stream()
+                .map(round ->
+                        Map.of(round.getPlayerA().getName(), createScoreFromDomain(round.getPlayerA().getScore()),
+                                round.getPlayerB().getName(), createScoreFromDomain(round.getPlayerB().getScore())
+                        )
+                )
+                .toList();
+        String gameResult = createGameResultFromDomain(game.getGameResult());
+        return new GameScore(gameRounds,gameResult );
     }
 
     private static String createScoreFromDomain(Score score){
-        String scoreValue =  "0";
-        switch (score){
-            case FIFTEEN -> scoreValue =  "15";
-            case THIRTY -> scoreValue =  "30";
-            case FOURTY -> scoreValue =  "40";
-            case ADVANTAGE -> scoreValue =  "ADVANTAGE";
-        }
+        return switch (score){
+            case FIFTEEN -> "15";
+            case THIRTY ->  "30";
+            case FOURTY ->  "40";
+            case ADVANTAGE -> "ADVANTAGE";
+            case ZERO -> "0";
+        };
 
-        return scoreValue;
+    }
+
+    private static String createGameResultFromDomain(GameResult gameResult){
+        return switch (gameResult){
+            case NO_WINNER_YET ->  "Party is on going .. no winner";
+            case DEUCE -> "Match is in deuce";
+            case A_ADVANTAGE -> "Player A has score advantage";
+            case B_ADVANTAGE -> "Player B has score advantage";
+            case A_WIN -> "Player A wins the game";
+            case B_WIN -> "Player B wins the game";
+        };
     }
 }

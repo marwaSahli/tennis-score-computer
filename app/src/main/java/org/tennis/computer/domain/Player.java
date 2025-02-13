@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class Player {
-    private String name;
+    private final String name;
     private Score score;
 
     private Player(String name, Score score){
@@ -14,6 +14,10 @@ public class Player {
 
     public static Player build(String name, Score score){
         return new Player(name, score);
+    }
+
+    public static Player buildFromData(Player player){
+        return build(player.getName(), player.getScore());
     }
 
     public void updateRoundScore(Player adversary){
@@ -32,7 +36,7 @@ public class Player {
         }
     }
 
-    public void updateScore(Score score){
+    public void update(Score score){
         this.score = score;
 
     }
