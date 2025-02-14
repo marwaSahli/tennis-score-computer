@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class GameNotValid extends DomainError{
     public GameNotValid(String message) {
-        super("Game not valid "+ message);
+        super("Game not valid ! "+ message);
     }
 }

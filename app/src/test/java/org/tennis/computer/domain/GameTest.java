@@ -50,11 +50,23 @@ public class GameTest {
 
 
         playerA.update(Score.FOURTY);
+        playerA.update(true);
+        playerB.update(false);
         game.get().update(gameRound);
         Assertions.assertEquals(GameResult.A_WIN, game.get().getGameResult());
 
 
         playerB.update(Score.FOURTY);
+        playerA.update(false);
+        playerB.update(true);
+        game.get().update(gameRound);
+        Assertions.assertEquals(GameResult.A_WIN, game.get().getGameResult());
+
+
+        game = Game.build("ABBAB");
+        gameRound = GameRound.build(playerA, playerB);
+        playerB.update(Score.FOURTY);
+        playerA.update(Score.FOURTY);
         game.get().update(gameRound);
         Assertions.assertEquals(GameResult.DEUCE, game.get().getGameResult());
 

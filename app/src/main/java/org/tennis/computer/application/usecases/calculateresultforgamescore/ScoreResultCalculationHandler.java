@@ -28,17 +28,22 @@ public class ScoreResultCalculationHandler implements CalculationHandler<String,
         for (char point : game.getGameGlobalScore().toCharArray()) {
             switch (point){
                 case 'A'  -> {
+                    playerA.update(true);
+                    playerB.update(false);
                     playerA.updateRoundScore(playerB);
                     if(playerB.getScore().equals(Score.ADVANTAGE))
                         playerB.update(Score.FOURTY);
 
                 }
                 case 'B' -> {
+                    playerA.update(false);
+                    playerB.update(true);
                     playerB.updateRoundScore(playerA);
                     if(playerA.getScore().equals(Score.ADVANTAGE))
                         playerA.update(Score.FOURTY);
                 }
             }
+
             game.update(GameRound.build(
                     Player.buildFromData(playerA),
                     Player.buildFromData(playerB)));

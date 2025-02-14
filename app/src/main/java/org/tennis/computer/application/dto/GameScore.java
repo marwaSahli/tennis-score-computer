@@ -40,7 +40,7 @@ public class GameScore {
 
     private static String createGameResultFromDomain(GameResult gameResult){
         return switch (gameResult){
-            case NO_WINNER_YET ->  "Party is on going .. no winner";
+            case NO_WINNER_YET ->  "Match is on going .. no winner yet";
             case DEUCE -> "Match is in deuce";
             case A_ADVANTAGE -> "Player A has score advantage";
             case B_ADVANTAGE -> "Player B has score advantage";

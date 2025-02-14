@@ -50,7 +50,6 @@ public class Game {
         }
         if (isResultWinForB())
             this.gameResult = GameResult.B_WIN;
-
     }
 
     private boolean isResultDeuce(){
@@ -72,13 +71,16 @@ public class Game {
     }
 
     private boolean isResultWinForA(){
+
        return   (this.gameResult == GameResult.A_ADVANTAGE
                && this.gameRounds.getLast().getPlayerA().getScore().equals(Score.ADVANTAGE))
                ||
                (this.gameResult == GameResult.NO_WINNER_YET
                &&  this.gameRounds.size()>1
+               && this.gameRounds.getLast().getPlayerA().isLastShooter()
                && this.gameRounds.getLast().getPlayerA().getScore().equals(Score.FOURTY)
-               && this.gameRounds.get(this.gameRounds.size() - 2).getPlayerA().getScore().equals(Score.FOURTY));
+               && this.gameRounds.get(this.gameRounds.size() - 2).getPlayerA().getScore().equals(Score.FOURTY)
+               && !this.gameRounds.getLast().getPlayerB().getScore().equals(Score.ADVANTAGE));
     }
 
     private boolean isResultWinForB(){
@@ -87,8 +89,10 @@ public class Game {
                 ||
                 (this.gameResult == GameResult.NO_WINNER_YET
                         &&  this.gameRounds.size()>1
+                        && this.gameRounds.getLast().getPlayerB().isLastShooter()
                         && this.gameRounds.getLast().getPlayerB().getScore().equals(Score.FOURTY)
-                        && this.gameRounds.get(this.gameRounds.size() - 2).getPlayerB().getScore().equals(Score.FOURTY));
+                        && this.gameRounds.get(this.gameRounds.size() - 2).getPlayerB().getScore().equals(Score.FOURTY)
+                        && !this.gameRounds.getLast().getPlayerA().getScore().equals(Score.ADVANTAGE));
     }
 
     private static Boolean isValidGlobalScore(String gameGlobalScore){

@@ -11,6 +11,7 @@ class PlayerTest {
         Player player = Player.build("Player A", Score.ZERO);
         assertEquals("Player A", player.getName());
         assertEquals(Score.ZERO, player.getScore());
+        assertFalse(player.isLastShooter());
     }
 
     @Test
@@ -34,6 +35,13 @@ class PlayerTest {
         Player player = Player.build("Player A", Score.ZERO);
         player.update(Score.FIFTEEN);
         assertEquals(Score.FIFTEEN, player.getScore());
+    }
+
+    @Test
+    void shouldUpdatePlayerShootingRound() {
+        Player player = Player.build("Player A", Score.ZERO);
+        player.update(true);
+        assertTrue( player.isLastShooter());
     }
 
     @Test

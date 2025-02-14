@@ -6,9 +6,6 @@ import org.tennis.computer.domain.GameRound;
 import org.tennis.computer.domain.Player;
 import org.tennis.computer.domain.Score;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameScoreTest {
@@ -21,28 +18,28 @@ class GameScoreTest {
                 Player.build("B", Score.ZERO)));
 
         GameScore gameScore = GameScore.from(game);
-        assertEquals("Party is on going .. no winner", gameScore.getGameResult());
+        assertEquals("Match is on going .. no winner yet", gameScore.getGameResult());
         assertEquals("15", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerA().getName()));
         assertEquals("0", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerB().getName()));
 
         game.update(GameRound.build(Player.build("A", Score.THIRTY),
                 Player.build("B", Score.ZERO)));
         gameScore = GameScore.from(game);
-        assertEquals("Party is on going .. no winner", gameScore.getGameResult());
+        assertEquals("Match is on going .. no winner yet", gameScore.getGameResult());
         assertEquals("30", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerA().getName()));
         assertEquals("0", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerB().getName()));
 
         game.update(GameRound.build(Player.build("A", Score.THIRTY),
                 Player.build("B", Score.FIFTEEN)));
         gameScore = GameScore.from(game);
-        assertEquals("Party is on going .. no winner", gameScore.getGameResult());
+        assertEquals("Match is on going .. no winner yet", gameScore.getGameResult());
         assertEquals("30", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerA().getName()));
         assertEquals("15", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerB().getName()));
 
         game.update(GameRound.build(Player.build("A", Score.THIRTY),
                 Player.build("B", Score.THIRTY)));
         gameScore = GameScore.from(game);
-        assertEquals("Party is on going .. no winner", gameScore.getGameResult());
+        assertEquals("Match is on going .. no winner yet", gameScore.getGameResult());
         assertEquals("30", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerA().getName()));
         assertEquals("30", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerB().getName()));
 
@@ -50,12 +47,12 @@ class GameScoreTest {
         game.update(GameRound.build(Player.build("A", Score.FOURTY),
                 Player.build("B", Score.THIRTY)));
         gameScore = GameScore.from(game);
-        assertEquals("Party is on going .. no winner", gameScore.getGameResult());
+        assertEquals("Match is on going .. no winner yet", gameScore.getGameResult());
         assertEquals("40", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerA().getName()));
         assertEquals("30", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerB().getName()));
 
 
-        game.update(GameRound.build(Player.build("A", Score.FOURTY),
+        game.update(GameRound.build(Player.build("A", Score.FOURTY, true),
                 Player.build("B", Score.THIRTY)));
         gameScore = GameScore.from(game);
         assertEquals("Player A wins the game", gameScore.getGameResult());
@@ -64,7 +61,7 @@ class GameScoreTest {
 
 
         game.update(GameRound.build(Player.build("A", Score.FOURTY),
-                Player.build("B", Score.FOURTY)));
+                Player.build("B", Score.FOURTY, true)));
         gameScore = GameScore.from(game);
         assertEquals("Player A wins the game", gameScore.getGameResult());
         assertEquals("40", gameScore.getGameRounds().getLast().get(game.getGameRounds().getLast().getPlayerA().getName()));
