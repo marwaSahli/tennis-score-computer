@@ -36,9 +36,20 @@ The following input “ABABAA” should print :
 
 
 ## Building and Running 
+It's supposed that you have Java 21 on your computer !
 
-Todo
+To build project,  run this command from the project's root:
+```sh
+ ./gradlew build 
+ ```
 
+To run application, run this command from the project's root:
+```sh
+ ./gradlew run -q --console=plain 
+ ```
+This is an example of the console's output:
+
+![console-output](doc/console-output.png)
 
 ## License
 
