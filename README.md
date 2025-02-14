@@ -51,7 +51,8 @@ This is an example of the console's output:
 
 ![console-output](doc/console-output.png)
 
-you can run the project directly from your editor , image below show how to run it on IntelliJ
+you can run the project directly from your editor , image below shows how to run it on IntelliJ
+
 ![Gradle run](doc/gradle-run.png)
 
 ## License
