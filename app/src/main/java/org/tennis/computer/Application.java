@@ -25,9 +25,12 @@ public class Application {
         System.out.println("**************************************************************************************************");
         System.out.println("Now you know the rules, give a sentence containing letter A and B and click on Enter button :");
         Scanner scanner = new Scanner(System.in);
-        String gameScore = scanner.nextLine();
-        Either<Error, GameScore> result = gameScoreCalculator.calculate(gameScore);
-        displayResults(result);
+        while (scanner.hasNext()){
+            String gameScore = scanner.nextLine();
+            Either<Error, GameScore> result = gameScoreCalculator.calculate(gameScore);
+            displayResults(result);
+        }
+        scanner.close();
 
     }
 
